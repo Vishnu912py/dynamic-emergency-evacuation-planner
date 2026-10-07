@@ -4,13 +4,13 @@ import {
   ShieldAlert, 
   LayoutDashboard, 
   Compass, 
-  Flame, 
   Cpu,
   Moon,
   Sun
 } from 'lucide-react';
 import { Dashboard } from './pages/Dashboard';
 import { Planner } from './pages/Planner';
+import flameLogo from './assets/flame.png';
 
 type Theme = 'dark' | 'light';
 
@@ -33,7 +33,7 @@ const Navbar: React.FC<NavbarProps> = ({ theme, onToggleTheme }) => {
         {/* Brand */}
         <Link to="/" className="flex items-center gap-3 group">
           <div className="p-2 rounded-xl bg-gradient-to-br from-rose-500 to-indigo-600 text-white shadow-lg shadow-indigo-500/20 group-hover:scale-105 transition-transform duration-200">
-            <Flame className="w-5 h-5" />
+            <img src={flameLogo} alt="" className="w-5 h-5 object-contain" />
           </div>
           <div>
             <div className="font-extrabold text-sm sm:text-base text-slate-100 tracking-tight flex items-center gap-2">

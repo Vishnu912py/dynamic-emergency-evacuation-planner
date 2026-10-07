@@ -409,13 +409,14 @@ export const Planner: React.FC = () => {
     setPeople((prevPeople) => {
       let anyMoved = false;
       const nextGrid = grid.map((r) => [...r]);
+      const nextRoutes = routes.map((route) => ({ ...route, path: [...route.path] }));
 
       const updatedPeople = prevPeople.map((person) => {
         if (person.status === 'EVACUATED' || person.status === 'TRAPPED') {
           return person;
         }
 
-        const personRoute = routes.find((r) => r.person_id === person.id);
+        const personRoute = nextRoutes.find((r) => r.person_id === person.id);
         if (!personRoute || !personRoute.path || personRoute.path.length <= 1) {
           return person;
         }
@@ -438,6 +439,9 @@ export const Planner: React.FC = () => {
         if (reachedExit) {
           // Vacate old cell
           nextGrid[person.row][person.col] = 'empty';
+          personRoute.path = [];
+          personRoute.distance = 0;
+          personRoute.status = 'EVACUATED';
           addEvent(`Person ${person.id} successfully reached ${reachedExit.label || reachedExit.id}!`, 'success');
           return {
             ...person,
@@ -469,6 +473,7 @@ export const Planner: React.FC = () => {
 
       if (anyMoved) {
         setGrid(nextGrid);
+        setRoutes(nextRoutes);
       }
 
       // Check if all evacuated

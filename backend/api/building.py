@@ -181,6 +181,11 @@ def create_demo_building(db: Session = Depends(get_db)):
         db.delete(existing)
         db.commit()
 
+    for child_model in (PersonModel, ExitModel, FireZoneModel):
+        db.query(child_model).filter(
+            child_model.building_id == demo_id
+        ).delete(synchronize_session=False)
+
     rows, cols = 20, 20
     grid = [["empty" for _ in range(cols)] for _ in range(rows)]
 
