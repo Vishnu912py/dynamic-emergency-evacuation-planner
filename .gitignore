@@ -1,0 +1,28 @@
+# Dependencies
+node_modules/
+backend/__pycache__/
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Testing and build
+.pytest_cache/
+frontend/dist/
+frontend/node_modules/
+
+# Database
+backend/*.db
+backend/evacuation.db
+*.db
+*.sqlite3
+
+# Environment
+.env
+.env.local
+.venv/
+venv/
+ENV/
+
+# IDE
+.vscode/
+.idea/
