@@ -1,16 +1,25 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
 import { 
   ShieldAlert, 
   LayoutDashboard, 
   Compass, 
   Flame, 
-  Cpu
+  Cpu,
+  Moon,
+  Sun
 } from 'lucide-react';
 import { Dashboard } from './pages/Dashboard';
 import { Planner } from './pages/Planner';
 
-const Navbar: React.FC = () => {
+type Theme = 'dark' | 'light';
+
+interface NavbarProps {
+  theme: Theme;
+  onToggleTheme: () => void;
+}
+
+const Navbar: React.FC<NavbarProps> = ({ theme, onToggleTheme }) => {
   const location = useLocation();
 
   const navLinks = [
@@ -28,7 +37,7 @@ const Navbar: React.FC = () => {
           </div>
           <div>
             <div className="font-extrabold text-sm sm:text-base text-slate-100 tracking-tight flex items-center gap-2">
-              <span>EvacPlanner</span>
+              <span>AgniRakshak</span>
               <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-indigo-500/20 border border-indigo-500/30 text-indigo-400">
                 A* Engine
               </span>
@@ -58,6 +67,16 @@ const Navbar: React.FC = () => {
               </Link>
             );
           })}
+          <button
+            type="button"
+            onClick={onToggleTheme}
+            aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+            aria-pressed={theme === 'light'}
+            title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+            className="flex items-center justify-center p-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800/80 transition-colors cursor-pointer"
+          >
+            {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+          </button>
         </nav>
 
         {/* Status Indicator */}
@@ -71,10 +90,21 @@ const Navbar: React.FC = () => {
 };
 
 export const App: React.FC = () => {
+  const [theme, setTheme] = useState<Theme>(() => {
+    const savedTheme = window.localStorage.getItem('evacplanner-theme');
+    return savedTheme === 'light' ? 'light' : 'dark';
+  });
+
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme;
+    document.documentElement.style.colorScheme = theme;
+    window.localStorage.setItem('evacplanner-theme', theme);
+  }, [theme]);
+
   return (
     <Router>
-      <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col">
-        <Navbar />
+      <div data-theme={theme} className="min-h-screen bg-slate-950 text-slate-100 flex flex-col">
+        <Navbar theme={theme} onToggleTheme={() => setTheme((current) => current === 'dark' ? 'light' : 'dark')} />
 
         <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <Routes>
